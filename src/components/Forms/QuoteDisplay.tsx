@@ -1,6 +1,6 @@
-import React from 'react';
-import { QuoteVariant } from '../../types/chat';
-import { Shield, ShieldCheck, RotateCcw, Star } from 'lucide-react';
+import { RotateCcw, Shield, ShieldCheck, Star } from "lucide-react";
+import React from "react";
+import { QuoteVariant } from "../../types/chat";
 
 interface QuoteDisplayProps {
   title: string;
@@ -15,30 +15,31 @@ const QuoteDisplay: React.FC<QuoteDisplayProps> = ({
   description,
   variants,
   comparisonFeatures,
-  onSelectVariant
+  onSelectVariant,
 }) => {
   const getVariantIcon = (variantName: string) => {
-    if (variantName.includes('Plus')) return <ShieldCheck className="w-6 h-6" />;
-    if (variantName.includes('ROP')) return <RotateCcw className="w-6 h-6" />;
+    if (variantName.includes("Plus"))
+      return <ShieldCheck className="w-6 h-6" />;
+    if (variantName.includes("ROP")) return <RotateCcw className="w-6 h-6" />;
     return <Shield className="w-6 h-6" />;
   };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(amount);
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* Header */}
       <div>
-        <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+        <h3 className="text-lg font-medium text-gray-900">{title}</h3>
         {description && (
-          <p className="text-gray-600 mt-1 text-sm">{description}</p>
+          <p className="text-gray-600 mt-2 text-sm">{description}</p>
         )}
       </div>
 
@@ -47,16 +48,16 @@ const QuoteDisplay: React.FC<QuoteDisplayProps> = ({
         {variants.map((variant, index) => (
           <div
             key={index}
-            className={`relative border-2 rounded-xl p-4 transition-all duration-200 cursor-pointer hover:shadow-lg ${
+            className={`relative border rounded-lg p-6 transition-all cursor-pointer ${
               variant.recommended
-                ? 'border-blue-500 bg-blue-50'
-                : 'border-gray-200 hover:border-blue-300'
+                ? "border-gray-900 bg-gray-50"
+                : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
             }`}
             onClick={() => onSelectVariant(variant)}
           >
             {/* Recommended Badge */}
             {variant.recommended && (
-              <div className="absolute -top-2 left-4 bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+              <div className="absolute -top-2 left-4 bg-gray-900 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1">
                 <Star size={12} className="fill-current" />
                 Recommended
               </div>
@@ -65,28 +66,37 @@ const QuoteDisplay: React.FC<QuoteDisplayProps> = ({
             <div className="flex items-start justify-between">
               {/* Left side - Plan details */}
               <div className="flex-1">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className={`p-2 rounded-lg ${
-                    variant.recommended ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'
-                  }`}>
+                <div className="flex items-center gap-3 mb-4">
+                  <div
+                    className={`p-2 rounded-lg ${
+                      variant.recommended
+                        ? "bg-gray-200 text-gray-700"
+                        : "bg-gray-100 text-gray-600"
+                    }`}
+                  >
                     {getVariantIcon(variant.name)}
                   </div>
                   <div>
-                    <h4 className="text-lg font-semibold text-gray-900">{variant.name}</h4>
-                    <p className="text-sm text-gray-500">
-                      {variant.policy_term} years coverage • {variant.premium_paying_term} years premium
+                    <h4 className="text-lg font-medium text-gray-900">
+                      {variant.name}
+                    </h4>
+                    <p className="text-sm text-gray-600">
+                      {variant.policy_term} years coverage •{" "}
+                      {variant.premium_paying_term} years premium
                     </p>
                   </div>
                 </div>
 
                 {/* Features */}
-                <div className="mb-3">
-                  <p className="text-sm font-medium text-gray-700 mb-2">Key Benefits:</p>
+                <div className="mb-4">
+                  <p className="text-sm font-medium text-gray-900 mb-3">
+                    Key Benefits:
+                  </p>
                   <div className="flex flex-wrap gap-2">
                     {variant.features.map((feature, featureIndex) => (
                       <span
                         key={featureIndex}
-                        className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800"
+                        className="inline-flex items-center px-3 py-1 rounded-full text-xs bg-gray-200 text-gray-800"
                       >
                         {feature}
                       </span>
@@ -96,7 +106,8 @@ const QuoteDisplay: React.FC<QuoteDisplayProps> = ({
 
                 {/* Coverage Amount */}
                 <div className="text-sm text-gray-600">
-                  <span className="font-medium">Life Cover:</span> {formatCurrency(variant.sum_assured)}
+                  <span className="font-medium">Life Cover:</span>{" "}
+                  {formatCurrency(variant.sum_assured)}
                 </div>
               </div>
 
@@ -107,15 +118,16 @@ const QuoteDisplay: React.FC<QuoteDisplayProps> = ({
                 </div>
                 <div className="text-sm text-gray-500">per year</div>
                 <div className="text-xs text-gray-400 mt-1">
-                  or {formatCurrency(Math.round(variant.premium / 12))} per month
+                  or {formatCurrency(Math.round(variant.premium / 12))} per
+                  month
                 </div>
-                
+
                 {/* Select Button */}
                 <button
-                  className={`mt-3 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                  className={`mt-4 px-6 py-2 rounded-lg font-medium transition-all ${
                     variant.recommended
-                      ? 'bg-blue-500 text-white hover:bg-blue-600'
-                      : 'bg-gray-900 text-white hover:bg-gray-800'
+                      ? "bg-gray-900 text-white hover:bg-gray-800"
+                      : "bg-gray-700 text-white hover:bg-gray-800"
                   }`}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -133,14 +145,19 @@ const QuoteDisplay: React.FC<QuoteDisplayProps> = ({
       {/* Comparison Features */}
       {comparisonFeatures && comparisonFeatures.length > 0 && (
         <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-          <h4 className="text-sm font-semibold text-gray-900 mb-3">Compare Features</h4>
+          <h4 className="text-sm font-semibold text-gray-900 mb-3">
+            Compare Features
+          </h4>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-200">
                   <th className="text-left py-2 text-gray-600">Feature</th>
                   {variants.map((variant, index) => (
-                    <th key={index} className="text-center py-2 text-gray-900 min-w-[100px]">
+                    <th
+                      key={index}
+                      className="text-center py-2 text-gray-900 min-w-[100px]"
+                    >
                       {variant.name}
                     </th>
                   ))}
@@ -168,8 +185,9 @@ const QuoteDisplay: React.FC<QuoteDisplayProps> = ({
       )}
 
       {/* Help Text */}
-      <div className="text-xs text-gray-500 bg-blue-50 p-3 rounded-lg">
-        💡 <strong>Need help choosing?</strong> Our agent Rajesh can explain the differences and help you pick the best plan for your family's needs.
+      <div className="text-sm text-gray-600 bg-gray-50 p-4 rounded-lg border border-gray-200">
+        💡 <strong>Need help choosing?</strong> Our agent Rajesh can explain the
+        differences and help you pick the best plan for your family's needs.
       </div>
     </div>
   );

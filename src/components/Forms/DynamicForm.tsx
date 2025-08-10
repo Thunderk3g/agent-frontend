@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { FormField } from '../../types/chat';
-import FormFieldComponent from './FormField';
+import React, { useState } from "react";
+import { FormField } from "../../types/chat";
+import FormFieldComponent from "./FormField";
 
 interface DynamicFormProps {
   title: string;
@@ -15,21 +15,21 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   description,
   fields,
   submitLabel,
-  onSubmit
+  onSubmit,
 }) => {
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleFieldChange = (fieldName: string, value: any) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [fieldName]: value
+      [fieldName]: value,
     }));
 
     // Clear error for this field
     if (errors[fieldName]) {
-      setErrors(prev => {
+      setErrors((prev) => {
         const newErrors = { ...prev };
         delete newErrors[fieldName];
         return newErrors;
@@ -40,11 +40,11 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
-    fields.forEach(field => {
+    fields.forEach((field) => {
       const value = formData[field.name];
 
       // Required field validation
-      if (field.required && (!value || value === '')) {
+      if (field.required && (!value || value === "")) {
         newErrors[field.name] = `${field.label} is required`;
         return;
       }
@@ -56,52 +56,76 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
       if (!validation) return;
 
       // Pattern validation
-      if (validation.pattern && typeof value === 'string') {
+      if (validation.pattern && typeof value === "string") {
         const regex = new RegExp(validation.pattern);
         if (!regex.test(value)) {
-          newErrors[field.name] = validation.custom_message || `${field.label} format is invalid`;
+          newErrors[field.name] =
+            validation.custom_message || `${field.label} format is invalid`;
           return;
         }
       }
 
       // Length validation
-      if (typeof value === 'string') {
+      if (typeof value === "string") {
         if (validation.min_length && value.length < validation.min_length) {
-          newErrors[field.name] = `${field.label} must be at least ${validation.min_length} characters`;
+          newErrors[
+            field.name
+          ] = `${field.label} must be at least ${validation.min_length} characters`;
           return;
         }
         if (validation.max_length && value.length > validation.max_length) {
-          newErrors[field.name] = `${field.label} must not exceed ${validation.max_length} characters`;
+          newErrors[
+            field.name
+          ] = `${field.label} must not exceed ${validation.max_length} characters`;
           return;
         }
       }
 
       // Numeric validation
-      if (field.type === 'number' && typeof value === 'number') {
-        if (validation.min_value !== undefined && value < validation.min_value) {
-          newErrors[field.name] = `${field.label} must be at least ${validation.min_value}`;
+      if (field.type === "number" && typeof value === "number") {
+        if (
+          validation.min_value !== undefined &&
+          value < validation.min_value
+        ) {
+          newErrors[
+            field.name
+          ] = `${field.label} must be at least ${validation.min_value}`;
           return;
         }
-        if (validation.max_value !== undefined && value > validation.max_value) {
-          newErrors[field.name] = `${field.label} must not exceed ${validation.max_value}`;
+        if (
+          validation.max_value !== undefined &&
+          value > validation.max_value
+        ) {
+          newErrors[
+            field.name
+          ] = `${field.label} must not exceed ${validation.max_value}`;
           return;
         }
       }
 
       // Age validation for date fields
-      if (field.type === 'date' && validation.min_age !== undefined) {
+      if (field.type === "date" && validation.min_age !== undefined) {
         const birthDate = new Date(value);
         const today = new Date();
-        const age = today.getFullYear() - birthDate.getFullYear() - 
-          (today.getMonth() < birthDate.getMonth() || 
-           (today.getMonth() === birthDate.getMonth() && today.getDate() < birthDate.getDate()) ? 1 : 0);
+        const age =
+          today.getFullYear() -
+          birthDate.getFullYear() -
+          (today.getMonth() < birthDate.getMonth() ||
+          (today.getMonth() === birthDate.getMonth() &&
+            today.getDate() < birthDate.getDate())
+            ? 1
+            : 0);
 
         if (age < validation.min_age) {
-          newErrors[field.name] = `You must be at least ${validation.min_age} years old`;
+          newErrors[
+            field.name
+          ] = `You must be at least ${validation.min_age} years old`;
           return;
         }
         if (validation.max_age !== undefined && age > validation.max_age) {
-          newErrors[field.name] = `Age must not exceed ${validation.max_age} years`;
+          newErrors[
+            field.name
+          ] = `Age must not exceed ${validation.max_age} years`;
           return;
         }
       }
@@ -113,7 +137,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -122,29 +146,29 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     try {
       await onSubmit(formData);
     } catch (error) {
-      console.error('Form submission error:', error);
+      console.error("Form submission error:", error);
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* Form Header */}
       <div>
-        <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+        <h3 className="text-lg font-medium text-gray-900">{title}</h3>
         {description && (
-          <p className="text-gray-600 mt-1 text-sm">{description}</p>
+          <p className="text-gray-600 mt-2 text-sm">{description}</p>
         )}
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-5">
         {fields.map((field) => (
           <FormFieldComponent
             key={field.name}
             field={field}
-            value={formData[field.name] || field.default_value || ''}
+            value={formData[field.name] || field.default_value || ""}
             error={errors[field.name]}
             onChange={(value) => handleFieldChange(field.name, value)}
           />
@@ -155,10 +179,10 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`w-full py-3 px-4 rounded-lg font-medium transition-all duration-200 ${
+            className={`w-full py-3 px-4 rounded-lg font-medium transition-all ${
               isSubmitting
-                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                : 'bg-blue-500 hover:bg-blue-600 text-white transform hover:scale-[1.02]'
+                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                : "bg-gray-900 hover:bg-gray-800 text-white"
             }`}
           >
             {isSubmitting ? (
@@ -175,20 +199,31 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
 
       {/* Form Progress Indicator */}
       {fields.length > 0 && (
-        <div className="pt-2">
-          <div className="flex justify-between items-center text-xs text-gray-500">
+        <div className="pt-3">
+          <div className="flex justify-between items-center text-xs text-gray-600">
             <span>
-              {Object.keys(formData).filter(key => formData[key]).length} of {fields.filter(f => f.required).length} required fields completed
+              {Object.keys(formData).filter((key) => formData[key]).length} of{" "}
+              {fields.filter((f) => f.required).length} required fields
+              completed
             </span>
             <span>
-              {Math.round((Object.keys(formData).filter(key => formData[key]).length / fields.filter(f => f.required).length) * 100)}%
+              {Math.round(
+                (Object.keys(formData).filter((key) => formData[key]).length /
+                  fields.filter((f) => f.required).length) *
+                  100
+              )}
+              %
             </span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-1 mt-1">
-            <div 
-              className="bg-blue-500 h-1 rounded-full transition-all duration-300"
+          <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
+            <div
+              className="bg-gray-700 h-1.5 rounded-full transition-all duration-300"
               style={{
-                width: `${Math.round((Object.keys(formData).filter(key => formData[key]).length / fields.filter(f => f.required).length) * 100)}%`
+                width: `${Math.round(
+                  (Object.keys(formData).filter((key) => formData[key]).length /
+                    fields.filter((f) => f.required).length) *
+                    100
+                )}%`,
               }}
             ></div>
           </div>

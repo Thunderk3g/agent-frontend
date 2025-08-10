@@ -1,5 +1,5 @@
-import React from 'react';
-import { FormField } from '../../types/chat';
+import React from "react";
+import { FormField } from "../../types/chat";
 
 interface FormFieldProps {
   field: FormField;
@@ -8,17 +8,22 @@ interface FormFieldProps {
   onChange: (value: any) => void;
 }
 
-const FormFieldComponent: React.FC<FormFieldProps> = ({ field, value, error, onChange }) => {
-  const baseInputClasses = `w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200 ${
-    error 
-      ? 'border-red-300 focus:border-red-500' 
-      : 'border-gray-300 focus:border-blue-500'
+const FormFieldComponent: React.FC<FormFieldProps> = ({
+  field,
+  value,
+  error,
+  onChange,
+}) => {
+  const baseInputClasses = `w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all text-sm ${
+    error
+      ? "border-red-300 focus:ring-red-500 focus:border-red-500"
+      : "border-gray-300 focus:border-gray-500"
   }`;
 
   const renderInput = () => {
     switch (field.type) {
-      case 'text':
-      case 'email':
+      case "text":
+      case "email":
         return (
           <input
             type={field.type}
@@ -30,7 +35,7 @@ const FormFieldComponent: React.FC<FormFieldProps> = ({ field, value, error, onC
           />
         );
 
-      case 'phone':
+      case "phone":
         return (
           <input
             type="tel"
@@ -42,12 +47,14 @@ const FormFieldComponent: React.FC<FormFieldProps> = ({ field, value, error, onC
           />
         );
 
-      case 'number':
+      case "number":
         return (
           <input
             type="number"
             value={value}
-            onChange={(e) => onChange(e.target.value ? Number(e.target.value) : '')}
+            onChange={(e) =>
+              onChange(e.target.value ? Number(e.target.value) : "")
+            }
             placeholder={field.placeholder}
             className={baseInputClasses}
             required={field.required}
@@ -56,7 +63,7 @@ const FormFieldComponent: React.FC<FormFieldProps> = ({ field, value, error, onC
           />
         );
 
-      case 'date':
+      case "date":
         return (
           <input
             type="date"
@@ -67,7 +74,7 @@ const FormFieldComponent: React.FC<FormFieldProps> = ({ field, value, error, onC
           />
         );
 
-      case 'textarea':
+      case "textarea":
         return (
           <textarea
             value={value}
@@ -79,7 +86,7 @@ const FormFieldComponent: React.FC<FormFieldProps> = ({ field, value, error, onC
           />
         );
 
-      case 'select':
+      case "select":
         return (
           <select
             value={value}
@@ -96,24 +103,31 @@ const FormFieldComponent: React.FC<FormFieldProps> = ({ field, value, error, onC
           </select>
         );
 
-      case 'radio':
+      case "radio":
         return (
-          <div className="space-y-2">
+          <div className="space-y-3">
             {field.options?.map((option) => (
-              <label key={option.value} className="flex items-center gap-2 cursor-pointer">
+              <label
+                key={option.value}
+                className="flex items-start gap-3 cursor-pointer"
+              >
                 <input
                   type="radio"
                   name={field.name}
                   value={option.value}
                   checked={value === option.value}
                   onChange={(e) => onChange(e.target.value)}
-                  className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                  className="w-4 h-4 text-gray-600 border-gray-300 focus:ring-gray-500 mt-0.5"
                   required={field.required}
                 />
                 <div>
-                  <span className="text-gray-900">{option.label}</span>
+                  <span className="text-gray-900 text-sm font-medium">
+                    {option.label}
+                  </span>
                   {option.description && (
-                    <p className="text-sm text-gray-500">{option.description}</p>
+                    <p className="text-sm text-gray-600 mt-1">
+                      {option.description}
+                    </p>
                   )}
                 </div>
               </label>
@@ -121,14 +135,17 @@ const FormFieldComponent: React.FC<FormFieldProps> = ({ field, value, error, onC
           </div>
         );
 
-      case 'checkbox':
+      case "checkbox":
         if (field.options && field.options.length > 1) {
           // Multiple checkboxes
           const selectedValues = Array.isArray(value) ? value : [];
           return (
-            <div className="space-y-2">
+            <div className="space-y-3">
               {field.options.map((option) => (
-                <label key={option.value} className="flex items-center gap-2 cursor-pointer">
+                <label
+                  key={option.value}
+                  className="flex items-start gap-3 cursor-pointer"
+                >
                   <input
                     type="checkbox"
                     value={option.value}
@@ -136,15 +153,19 @@ const FormFieldComponent: React.FC<FormFieldProps> = ({ field, value, error, onC
                     onChange={(e) => {
                       const newValue = e.target.checked
                         ? [...selectedValues, option.value]
-                        : selectedValues.filter(v => v !== option.value);
+                        : selectedValues.filter((v) => v !== option.value);
                       onChange(newValue);
                     }}
-                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    className="w-4 h-4 text-gray-600 border-gray-300 rounded focus:ring-gray-500 mt-0.5"
                   />
                   <div>
-                    <span className="text-gray-900">{option.label}</span>
+                    <span className="text-gray-900 text-sm font-medium">
+                      {option.label}
+                    </span>
                     {option.description && (
-                      <p className="text-sm text-gray-500">{option.description}</p>
+                      <p className="text-sm text-gray-600 mt-1">
+                        {option.description}
+                      </p>
                     )}
                   </div>
                 </label>
@@ -154,15 +175,15 @@ const FormFieldComponent: React.FC<FormFieldProps> = ({ field, value, error, onC
         } else {
           // Single checkbox
           return (
-            <label className="flex items-center gap-2 cursor-pointer">
+            <label className="flex items-start gap-3 cursor-pointer">
               <input
                 type="checkbox"
-                checked={value === true || value === 'true'}
+                checked={value === true || value === "true"}
                 onChange={(e) => onChange(e.target.checked)}
-                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                className="w-4 h-4 text-gray-600 border-gray-300 rounded focus:ring-gray-500 mt-0.5"
                 required={field.required}
               />
-              <span className="text-gray-900">
+              <span className="text-gray-900 text-sm font-medium">
                 {field.options?.[0]?.label || field.label}
               </span>
             </label>
@@ -184,9 +205,9 @@ const FormFieldComponent: React.FC<FormFieldProps> = ({ field, value, error, onC
   };
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-2">
       {/* Label */}
-      <label className="block text-sm font-medium text-gray-700">
+      <label className="block text-sm font-medium text-gray-900">
         {field.label}
         {field.required && <span className="text-red-500 ml-1">*</span>}
       </label>
@@ -196,13 +217,11 @@ const FormFieldComponent: React.FC<FormFieldProps> = ({ field, value, error, onC
 
       {/* Help text */}
       {field.help_text && (
-        <p className="text-sm text-gray-500">{field.help_text}</p>
+        <p className="text-sm text-gray-600">{field.help_text}</p>
       )}
 
       {/* Error message */}
-      {error && (
-        <p className="text-sm text-red-600">{error}</p>
-      )}
+      {error && <p className="text-sm text-red-600">{error}</p>}
     </div>
   );
 };

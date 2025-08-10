@@ -1,5 +1,5 @@
-import React from 'react';
-import { CreditCard, Shield, Lock, ExternalLink } from 'lucide-react';
+import { CreditCard, ExternalLink, Lock, Shield } from "lucide-react";
+import React from "react";
 
 interface PaymentDetails {
   amount: number;
@@ -24,20 +24,20 @@ const PaymentRedirect: React.FC<PaymentRedirectProps> = ({
   description,
   paymentDetails,
   redirectUrl,
-  onProceedToPayment
+  onProceedToPayment,
 }) => {
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(amount);
   };
 
   const handlePaymentClick = () => {
     // In a real application, this would redirect to the actual payment gateway
-    window.open(redirectUrl, '_blank');
+    window.open(redirectUrl, "_blank");
     onProceedToPayment();
   };
 
@@ -45,51 +45,61 @@ const PaymentRedirect: React.FC<PaymentRedirectProps> = ({
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-          <Shield className="w-8 h-8 text-green-600" />
+        <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-6">
+          <Shield className="w-8 h-8 text-gray-700" />
         </div>
-        <h3 className="text-xl font-semibold text-gray-900">{title}</h3>
-        {description && (
-          <p className="text-gray-600 mt-2">{description}</p>
-        )}
+        <h3 className="text-xl font-medium text-gray-900">{title}</h3>
+        {description && <p className="text-gray-600 mt-3">{description}</p>}
       </div>
 
       {/* Policy Summary Card */}
-      <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-xl p-6 border border-blue-200">
-        <h4 className="text-lg font-semibold text-gray-900 mb-4">Policy Summary</h4>
-        
+      <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
+        <h4 className="text-lg font-medium text-gray-900 mb-4">
+          Policy Summary
+        </h4>
+
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div>
             <span className="text-gray-600">Plan:</span>
-            <p className="font-medium text-gray-900">{paymentDetails.variant_name}</p>
+            <p className="font-medium text-gray-900">
+              {paymentDetails.variant_name}
+            </p>
           </div>
           <div>
             <span className="text-gray-600">Coverage:</span>
-            <p className="font-medium text-gray-900">{formatCurrency(paymentDetails.sum_assured)}</p>
+            <p className="font-medium text-gray-900">
+              {formatCurrency(paymentDetails.sum_assured)}
+            </p>
           </div>
           <div>
             <span className="text-gray-600">Policy Term:</span>
-            <p className="font-medium text-gray-900">{paymentDetails.policy_term} years</p>
+            <p className="font-medium text-gray-900">
+              {paymentDetails.policy_term} years
+            </p>
           </div>
           <div>
             <span className="text-gray-600">Premium Paying Term:</span>
-            <p className="font-medium text-gray-900">{paymentDetails.premium_paying_term} years</p>
+            <p className="font-medium text-gray-900">
+              {paymentDetails.premium_paying_term} years
+            </p>
           </div>
         </div>
 
         {/* Payment Amount Highlight */}
-        <div className="mt-6 p-4 bg-white rounded-lg border-2 border-blue-300">
+        <div className="mt-6 p-4 bg-white rounded-lg border border-gray-300">
           <div className="flex items-center justify-between">
             <div>
               <span className="text-gray-600 text-sm">
-                {paymentDetails.premium_frequency.charAt(0).toUpperCase() + paymentDetails.premium_frequency.slice(1)} Premium
+                {paymentDetails.premium_frequency.charAt(0).toUpperCase() +
+                  paymentDetails.premium_frequency.slice(1)}{" "}
+                Premium
               </span>
-              <p className="text-2xl font-bold text-blue-600">
+              <p className="text-2xl font-bold text-gray-900">
                 {formatCurrency(paymentDetails.amount)}
               </p>
             </div>
             <div className="text-right">
-              <CreditCard className="w-8 h-8 text-blue-500" />
+              <CreditCard className="w-8 h-8 text-gray-600" />
             </div>
           </div>
         </div>
@@ -98,7 +108,7 @@ const PaymentRedirect: React.FC<PaymentRedirectProps> = ({
       {/* Security & Trust Indicators */}
       <div className="bg-gray-50 rounded-lg p-4">
         <div className="flex items-center gap-3 mb-3">
-          <Lock className="w-5 h-5 text-green-600" />
+          <Lock className="w-5 h-5 text-gray-700" />
           <span className="font-medium text-gray-900">Secure Payment</span>
         </div>
         <ul className="text-sm text-gray-600 space-y-1">
@@ -136,7 +146,7 @@ const PaymentRedirect: React.FC<PaymentRedirectProps> = ({
       <div className="pt-4">
         <button
           onClick={handlePaymentClick}
-          className="w-full bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 text-white py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-200 transform hover:scale-[1.02] flex items-center justify-center gap-3"
+          className="w-full bg-gray-900 hover:bg-gray-800 text-white py-4 px-6 rounded-lg font-medium text-lg transition-all flex items-center justify-center gap-3"
         >
           <CreditCard className="w-5 h-5" />
           Pay {formatCurrency(paymentDetails.amount)} Securely
@@ -147,13 +157,15 @@ const PaymentRedirect: React.FC<PaymentRedirectProps> = ({
       {/* Support Information */}
       <div className="text-center text-xs text-gray-500 space-y-1">
         <p>Questions about your payment? Our agent Rajesh is here to help!</p>
-        <p className="font-medium">Call: 1800 209 7272 | Email: customercare@bajajallianz.co.in</p>
+        <p className="font-medium">
+          Call: 1800 209 7272 | Email: customercare@bajajallianz.co.in
+        </p>
       </div>
 
       {/* Terms */}
       <div className="text-xs text-gray-400 text-center">
-        By proceeding with payment, you agree to our terms and conditions.
-        Your policy will be active immediately upon successful payment.
+        By proceeding with payment, you agree to our terms and conditions. Your
+        policy will be active immediately upon successful payment.
       </div>
     </div>
   );
