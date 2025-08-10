@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ChatRequest, ChatResponse, SessionInfo } from '../types/chat';
+import { ChatResponse, SessionInfo } from '../types/chat';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:9000';
 
@@ -28,16 +28,32 @@ apiClient.interceptors.response.use(
 );
 
 export const chatAPI = {
-  // Start a new chat session
+  // Start a new LLM-first session (via agent)
   startSession: async (): Promise<{ session_id: string; initial_message?: string; initial_actions?: any[] }> => {
-    const response = await apiClient.post('/api/chat/session/start');
+    const response = await apiClient.post('/api/agent/turn', { message: 'start' });
+    const data = response.data as ChatResponse & { session_id: string };
+    return {
+      session_id: data.session_id,
+      initial_message: (data as any).message,
+      initial_actions: (data as any).actions || [],
+    };
+  },
+  // LLM-first: single turn endpoint fully orchestrated by backend
+  sendTurn: async (message: string, sessionId?: string): Promise<ChatResponse> => {
+    const response = await apiClient.post('/api/agent/turn', {
+      session_id: sessionId,
+      message,
+    });
     return response.data;
   },
 
-  // Send a chat message
-  sendMessage: async (request: ChatRequest): Promise<ChatResponse> => {
-    const response = await apiClient.post('/api/chat/message', request);
-    return response.data;
+  // Streaming version for more realistic agent typing
+  sendTurnStream: (message: string, sessionId?: string): EventSource => {
+    // Use text-stream endpoint that streams plain text chunks
+    const url = `${API_BASE_URL}/api/agent/turn/stream`;
+    // Fallback to one-shot if EventSource cannot POST; we can polyfill with fetch stream later
+    // For now, use fetch with ReadableStream in the component; keeping placeholder here.
+    throw new Error('Use fetch streaming in component');
   },
 
   // Get session information

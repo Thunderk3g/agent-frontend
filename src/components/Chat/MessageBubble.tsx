@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChatMessage } from '../../types/chat';
-import { User, Bot, Shield } from 'lucide-react';
+import { User, Shield } from 'lucide-react';
 import ActionRenderer from './ActionRenderer';
 
 interface MessageBubbleProps {

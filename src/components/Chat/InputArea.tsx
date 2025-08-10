@@ -85,8 +85,10 @@ const InputArea: React.FC<InputAreaProps> = ({
         </form>
 
         {/* Helper text */}
-        <div className="mt-2 text-xs text-gray-500 text-center">
-          Press Enter to send, Shift+Enter for new line
+        <div className="mt-2 text-xs text-gray-500 text-center flex items-center justify-center gap-4">
+          <span>Press Enter to send, Shift+Enter for new line</span>
+          <span className="w-px h-4 bg-gray-300" />
+          <span>{message.length}/1000</span>
         </div>
       </div>
     </div>

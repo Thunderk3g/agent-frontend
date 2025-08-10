@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { ChatMessage, ChatRequest, ChatResponse } from '../types/chat';
+import { ChatMessage, ChatResponse } from '../types/chat';
 import { chatAPI } from '../services/api';
 
 interface UseChatState {
@@ -101,14 +101,25 @@ export const useChat = (): UseChatState & UseChatActions => {
     setState(prev => ({ ...prev, isLoading: true, error: null }));
 
     try {
-      const request: ChatRequest = {
-        session_id: state.sessionId || undefined,
-        message: message || 'Form submitted',
-        form_data: formData,
-        action_data: actionData
-      };
+      // LLM-first: send the raw turn to the agent; backend/LLM handles orchestration
+      const response: ChatResponse = await chatAPI.sendTurn(message || 'Form submitted', state.sessionId || undefined);
 
-      const response: ChatResponse = await chatAPI.sendMessage(request);
+      // Parse structured JSON if backend returns JSON-like content in message
+      let content = response.message;
+      let display = content;
+      let storeUpdate: any = undefined;
+      try {
+        const firstBrace = content.indexOf('{');
+        const lastBrace = content.lastIndexOf('}');
+        if (firstBrace !== -1 && lastBrace > firstBrace) {
+          const snippet = content.slice(firstBrace, lastBrace + 1);
+          const obj = JSON.parse(snippet);
+          // Show friendly reply + next question
+          display = [obj.reply, obj.next_question].filter(Boolean).join('\n\n');
+          storeUpdate = obj.store_update;
+          // Optionally reflect extracted fields inline in UI state
+        }
+      } catch {}
 
       // Update session ID if this was the first message
       if (!state.sessionId) {
@@ -118,10 +129,16 @@ export const useChat = (): UseChatState & UseChatActions => {
       // Add bot response
       addMessage({
         type: 'bot',
-        content: response.message,
+        content: display,
         timestamp: new Date(),
         actions: response.actions
       });
+
+      // Apply data store mapping to persist in local state (for now just keep in memory)
+      if (storeUpdate) {
+        // Persist to backend via agent turn already; here we could also mirror to localStorage if needed
+        // In future: lift to a dedicated store context
+      }
 
       setState(prev => ({
         ...prev,
