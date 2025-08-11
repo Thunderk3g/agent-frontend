@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { ChatMessage, ChatResponse } from '../types/chat';
 import { chatAPI } from '../services/api';
+import { useStore } from '../store/useStore';
 
 interface UseChatState {
   messages: ChatMessage[];
@@ -19,11 +20,13 @@ interface UseChatActions {
 }
 
 export const useChat = (): UseChatState & UseChatActions => {
+  const { sessionId, setSessionId, setSessionState, loadFromBackend } = useStore();
+  
   const [state, setState] = useState<UseChatState>({
     messages: [],
     isLoading: false,
     error: null,
-    sessionId: null,
+    sessionId: sessionId || null,
     currentState: '',
     dataCollection: { collected: [], missing: [], completion_percentage: 0 }
   });
@@ -59,6 +62,12 @@ export const useChat = (): UseChatState & UseChatActions => {
         isLoading: false,
         messages: []
       }));
+      
+      // Update unified store
+      setSessionId(sessionData.session_id);
+      if ((sessionData as any).current_state) {
+        setSessionState((sessionData as any).current_state);
+      }
 
       // Add initial message if provided
       if (sessionData.initial_message) {
@@ -76,7 +85,7 @@ export const useChat = (): UseChatState & UseChatActions => {
         error: error instanceof Error ? error.message : 'Failed to start session'
       }));
     }
-  }, [addMessage]);
+  }, [addMessage, setSessionId, setSessionState]);
 
   const sendMessage = useCallback(async (
     message: string, 
@@ -124,6 +133,12 @@ export const useChat = (): UseChatState & UseChatActions => {
       // Update session ID if this was the first message
       if (!state.sessionId) {
         setState(prev => ({ ...prev, sessionId: response.session_id }));
+        setSessionId(response.session_id);
+      }
+      
+      // Load/sync form data with backend session
+      if (response.session_id) {
+        await loadFromBackend(response.session_id);
       }
 
       // Add bot response
@@ -153,7 +168,7 @@ export const useChat = (): UseChatState & UseChatActions => {
         error: error instanceof Error ? error.message : 'Failed to send message'
       }));
     }
-  }, [state.sessionId, addMessage, startNewSession]);
+  }, [state.sessionId, addMessage, startNewSession, loadFromBackend, setSessionId]);
 
   const clearError = useCallback(() => {
     setState(prev => ({ ...prev, error: null }));

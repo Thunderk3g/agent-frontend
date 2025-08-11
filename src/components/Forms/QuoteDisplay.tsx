@@ -169,7 +169,7 @@ const QuoteDisplay: React.FC<QuoteDisplayProps> = ({
 
       {/* Help Text */}
       <div className="text-xs text-gray-500 bg-blue-50 p-3 rounded-lg">
-        💡 <strong>Need help choosing?</strong> Our agent Rajesh can explain the differences and help you pick the best plan for your family's needs.
+        💡 <strong>Need help choosing?</strong> Our agent Abhinav can explain the differences and help you pick the best plan for your family's needs.
       </div>
     </div>
   );

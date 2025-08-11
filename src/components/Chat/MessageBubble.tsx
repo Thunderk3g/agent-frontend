@@ -28,7 +28,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, onActionSubmit }
           {/* Agent Name for Bot Messages */}
           {!isUser && (
             <div className="text-sm font-semibold text-gray-700 flex items-center gap-2 px-1">
-              <span>Rajesh</span>
+              <span>Abhinav</span>
               <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
                 Insurance Agent
               </span>

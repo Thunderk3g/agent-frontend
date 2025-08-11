@@ -146,7 +146,7 @@ const PaymentRedirect: React.FC<PaymentRedirectProps> = ({
 
       {/* Support Information */}
       <div className="text-center text-xs text-gray-500 space-y-1">
-        <p>Questions about your payment? Our agent Rajesh is here to help!</p>
+        <p>Questions about your payment? Our agent Abhinav is here to help!</p>
         <p className="font-medium">Call: 1800 209 7272 | Email: customercare@bajajallianz.co.in</p>
       </div>
 
