@@ -3,8 +3,6 @@ import { useChat } from '../../hooks/useChat';
 import MessageBubble from './MessageBubble';
 import TypingIndicator from './TypingIndicator';
 import InputArea from './InputArea';
-import RecommendedPlans from './RecommendedPlans';
-import ProcessSteps from './ProcessSteps';
 import { AlertTriangle, RefreshCw, Shield } from 'lucide-react';
 
 const ChatInterface: React.FC = () => {
@@ -81,17 +79,7 @@ const ChatInterface: React.FC = () => {
       <header className="chat-header">
         <div className="chat-header-content">
           <div className="header-left">
-            <h1 className="chat-title">eTouch-II AI Agent</h1>
-          </div>
-          <div className="header-right">
-            <button className="header-btn secondary">
-              <span className="material-icons">description</span>
-              Report
-            </button>
-            <button className="header-btn primary">
-              <span className="material-icons">share</span>
-              Share
-            </button>
+            <h1 className="chat-title">eTouch-II Insurance Assistant</h1>
           </div>
         </div>
       </header>
@@ -103,15 +91,7 @@ const ChatInterface: React.FC = () => {
           {/* Welcome State */}
           {messages.length === 0 && !isLoading && (
             <div className="welcome-state">
-              <h2 className="welcome-question">How do I choose the best health plan for my client?</h2>
-              
-              {/* Recommended Plans */}
-              <RecommendedPlans />
-              
-              {/* Process Steps */}
-              <div className="process-steps-section">
-                <ProcessSteps />
-              </div>
+              <h2 className="welcome-question">How can I help you with your insurance needs today?</h2>
             </div>
           )}
 

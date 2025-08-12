@@ -18,7 +18,7 @@ const TypingIndicator: React.FC = () => {
               <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
               <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
             </div>
-            <span className="text-sm text-gray-500 ml-2">Abhinav is typing...</span>
+            <span className="text-sm text-gray-500 ml-2">EtouchAgent is typing...</span>
           </div>
         </div>
       </div>

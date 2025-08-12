@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { ChatMessage, ChatResponse } from '../types/chat';
 import { chatAPI } from '../services/api';
 import { useStore } from '../store/useStore';
+import { ResponseParser } from '../utils/responseParser';
 
 interface UseChatState {
   messages: ChatMessage[];
@@ -114,21 +115,18 @@ export const useChat = (): UseChatState & UseChatActions => {
       const response: ChatResponse = await chatAPI.sendTurn(message || 'Form submitted', state.sessionId || undefined);
 
       // Parse structured JSON if backend returns JSON-like content in message
-      let content = response.message;
-      let display = content;
-      let storeUpdate: any = undefined;
-      try {
-        const firstBrace = content.indexOf('{');
-        const lastBrace = content.lastIndexOf('}');
-        if (firstBrace !== -1 && lastBrace > firstBrace) {
-          const snippet = content.slice(firstBrace, lastBrace + 1);
-          const obj = JSON.parse(snippet);
-          // Show friendly reply + next question
-          display = [obj.reply, obj.next_question].filter(Boolean).join('\n\n');
-          storeUpdate = obj.store_update;
-          // Optionally reflect extracted fields inline in UI state
-        }
-      } catch {}
+      const content = response.message;
+      const parseResult = ResponseParser.parseResponse(content);
+      
+      let display = parseResult.text;
+      let storeUpdate = parseResult.storeUpdate;
+      
+      // Extract quote data if available
+      const quoteData = ResponseParser.extractQuoteData(response);
+      if (quoteData) {
+        console.log('Quote data extracted:', quoteData);
+        // Could display quote information in a special UI component
+      }
 
       // Update session ID if this was the first message
       if (!state.sessionId) {
