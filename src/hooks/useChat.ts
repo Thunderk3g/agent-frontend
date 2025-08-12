@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { ChatMessage, ChatResponse } from '../types/chat';
+import { ChatMessage, ChatResponse, ChatAction } from '../types/chat';
 import { chatAPI } from '../services/api';
 import { useStore } from '../store/useStore';
 import { ResponseParser } from '../utils/responseParser';
@@ -139,12 +139,47 @@ export const useChat = (): UseChatState & UseChatActions => {
         await loadFromBackend(response.session_id);
       }
 
+      // Check for payment options in metadata and create payment buttons action
+      let actions = response.actions || [];
+      if (response.metadata?.payment_options?.show_payment_buttons) {
+        const paymentAction: ChatAction = {
+          type: 'payment_buttons' as const,
+          title: 'Complete Your Purchase',
+          description: 'Choose your preferred payment method to proceed with your insurance policy.',
+          selected_quote: response.metadata.payment_options.selected_quote,
+          buttons: response.metadata.payment_options.buttons
+        };
+        actions = [...actions, paymentAction];
+      }
+
+      // Check for receipt in metadata and create receipt action
+      if (response.metadata?.receipt?.show_receipt) {
+        const receiptAction: ChatAction = {
+          type: 'receipt' as const,
+          title: 'Policy Receipt & Confirmation',
+          description: 'Your insurance policy has been successfully activated.',
+          receipt_data: response.metadata.receipt
+        };
+        actions = [...actions, receiptAction];
+      }
+
+      // Check for human agent handoff in metadata
+      if (response.metadata?.human_agent_handoff?.show) {
+        const handoffAction: ChatAction = {
+          type: 'human_agent_handoff' as const,
+          title: 'Premium Support Available',
+          message: response.metadata.human_agent_handoff.message,
+          estimated_wait_time: response.metadata.human_agent_handoff.estimated_wait_time
+        };
+        actions = [...actions, handoffAction];
+      }
+
       // Add bot response
       addMessage({
         type: 'bot',
         content: display,
         timestamp: new Date(),
-        actions: response.actions
+        actions: actions
       });
 
       // Apply data store mapping to persist in local state (for now just keep in memory)

@@ -3,6 +3,7 @@ import { useChat } from '../../hooks/useChat';
 import MessageBubble from './MessageBubble';
 import TypingIndicator from './TypingIndicator';
 import InputArea from './InputArea';
+import ThemeToggle from '../ThemeToggle';
 import { AlertTriangle, RefreshCw, Shield } from 'lucide-react';
 
 const ChatInterface: React.FC = () => {
@@ -61,6 +62,33 @@ const ChatInterface: React.FC = () => {
           selected_options: data.selected_options
         });
         break;
+      case 'payment_method_selected':
+        const methodLabels: Record<string, string> = {
+          'proceed_payment': 'Proceed to Payment',
+          'simulate_success': 'Simulate Payment Success', 
+          'simulate_failure': 'Simulate Payment Failure'
+        };
+        const methodLabel = methodLabels[data.payment_method] || data.payment_method;
+        sendMessage(`Selected payment method: ${methodLabel}`, undefined, {
+          action: 'payment_method_selected',
+          payment_method: data.payment_method,
+          selected_quote: data.selected_quote
+        });
+        break;
+      case 'download_pdf':
+        // Simulate PDF download - in real implementation, this would trigger a download
+        const link = document.createElement('a');
+        link.href = '/api/download-pdf/' + (data.filename || 'benefit_illustration.pdf');
+        link.download = data.filename || 'benefit_illustration.pdf';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        sendMessage('Downloading benefit illustration PDF...', undefined, {
+          action: 'download_pdf',
+          filename: data.filename
+        });
+        break;
       default:
         sendMessage('Action completed', undefined, actionData);
     }
@@ -80,6 +108,9 @@ const ChatInterface: React.FC = () => {
         <div className="chat-header-content">
           <div className="header-left">
             <h1 className="chat-title">eTouch-II Insurance Assistant</h1>
+          </div>
+          <div className="header-right flex items-center gap-3">
+            <ThemeToggle />
           </div>
         </div>
       </header>

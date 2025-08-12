@@ -27,9 +27,9 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, onActionSubmit }
         <div className="flex flex-col gap-2">
           {/* Agent Name for Bot Messages */}
           {!isUser && (
-            <div className="text-sm font-semibold text-gray-700 flex items-center gap-2 px-1">
+            <div className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2 px-1">
               <span>EtouchAgent</span>
-              <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
+              <span className="text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 px-2 py-1 rounded-full font-medium">
                 Insurance Agent
               </span>
             </div>
@@ -39,17 +39,17 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, onActionSubmit }
           <div className={`rounded-2xl px-5 py-4 relative shadow-md ${
             isUser
               ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-br-md'
-              : 'bg-white text-gray-800 border border-gray-200 rounded-bl-md'
+              : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600 rounded-bl-md'
           }`}>
             {/* Speech Bubble Tail */}
             {!isUser && (
-              <div className="absolute -left-2 top-4 w-0 h-0 border-t-8 border-t-transparent border-r-8 border-r-white border-b-8 border-b-transparent"></div>
+              <div className="absolute -left-2 top-4 w-0 h-0 border-t-8 border-t-transparent border-r-8 border-r-white dark:border-r-gray-800 border-b-8 border-b-transparent"></div>
             )}
             {isUser && (
               <div className="absolute -right-2 top-4 w-0 h-0 border-t-8 border-t-transparent border-l-8 border-l-blue-500 border-b-8 border-b-transparent"></div>
             )}
 
-            <div className="text-sm leading-relaxed text-black whitespace-pre-wrap">
+            <div className="text-base leading-relaxed text-gray-800 dark:text-gray-200 whitespace-pre-wrap">
               {message.content}
             </div>
           </div>

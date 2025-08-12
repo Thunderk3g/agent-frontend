@@ -10,15 +10,15 @@
 }
 
 :root {
-  /* Typography - Updated to match theme */
+  /* Typography - Updated to match theme with larger sizes */
   --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  --h1-size: 32px; --h1-weight: 700;
-  --h2-size: 24px; --h2-weight: 600;
-  --h3-size: 20px; --h3-weight: 600;
-  --body-size: 14px; --body-weight: 400;
-  --caption-size: 12px; --caption-weight: 400;
+  --h1-size: 40px; --h1-weight: 700;
+  --h2-size: 30px; --h2-weight: 600;
+  --h3-size: 24px; --h3-weight: 600;
+  --body-size: 16px; --body-weight: 400;
+  --caption-size: 14px; --caption-weight: 400;
 
-  /* Colors - Clean neutral theme */
+  /* Light theme colors */
   --color-primary: #111827;
   --color-secondary: #6b7280;
   --color-tertiary: #9ca3af;
@@ -44,6 +44,24 @@
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
+/* Dark theme colors */
+.dark {
+  --color-primary: #f9fafb;
+  --color-secondary: #d1d5db;
+  --color-tertiary: #9ca3af;
+  --color-accent: #4b5563;
+  --color-accent-hover: #6b7280;
+  --color-bg: #111827;
+  --color-surface: #1f2937;
+  --color-border: #374151;
+  --color-border-light: #374151;
+
+  /* Dark theme shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+}
+
 body {
   margin: 0;
   font-family: var(--font-family);
@@ -52,7 +70,7 @@ body {
   background-color: var(--color-bg);
   color: var(--color-primary);
   font-size: var(--body-size);
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 code {
@@ -173,6 +191,18 @@ code {
 .bg-red-50 { background-color: #fef2f2; }
 .bg-yellow-50 { background-color: #fefce8; }
 
+/* Dark mode variants */
+.dark .bg-white { background-color: var(--color-surface); }
+.dark .bg-gray-50 { background-color: #374151; }
+.dark .bg-gray-100 { background-color: #4b5563; }
+.dark .bg-gray-200 { background-color: #6b7280; }
+.dark .bg-blue-50 { background-color: #1e3a8a; }
+.dark .bg-blue-100 { background-color: #1e40af; }
+.dark .bg-green-50 { background-color: #14532d; }
+.dark .bg-green-100 { background-color: #166534; }
+.dark .bg-red-50 { background-color: #7f1d1d; }
+.dark .bg-yellow-50 { background-color: #78350f; }
+
 .text-white { color: white; }
 .text-black { color: black; }
 .text-gray-400 { color: #9ca3af; }
@@ -193,6 +223,19 @@ code {
 .text-red-800 { color: #991b1b; }
 .text-yellow-800 { color: #92400e; }
 
+/* Dark mode text variants */
+.dark .text-black { color: var(--color-primary); }
+.dark .text-gray-900 { color: var(--color-primary); }
+.dark .text-gray-800 { color: var(--color-secondary); }
+.dark .text-gray-700 { color: var(--color-secondary); }
+.dark .text-gray-600 { color: var(--color-tertiary); }
+.dark .text-blue-800 { color: #60a5fa; }
+.dark .text-blue-900 { color: #3b82f6; }
+.dark .text-green-700 { color: #4ade80; }
+.dark .text-green-800 { color: #22c55e; }
+.dark .text-red-800 { color: #f87171; }
+.dark .text-yellow-800 { color: #fbbf24; }
+
 .border-gray-200 { border-color: #e5e7eb; }
 .border-neutral { border-color: var(--color-border); }
 .border-gray-300 { border-color: #d1d5db; }
@@ -207,12 +250,20 @@ code {
 .border-red-400 { border-color: #f87171; }
 .border-yellow-200 { border-color: #fde68a; }
 
-.text-xs { font-size: 0.75rem; line-height: 1rem; }
-.text-sm { font-size: 0.875rem; line-height: 1.25rem; }
-.text-base { font-size: 1rem; line-height: 1.5rem; }
-.text-lg { font-size: 1.125rem; line-height: 1.75rem; }
-.text-xl { font-size: 1.25rem; line-height: 1.75rem; }
-.text-2xl { font-size: 1.5rem; line-height: 2rem; }
+/* Dark mode border variants */
+.dark .border-gray-200 { border-color: var(--color-border); }
+.dark .border-gray-300 { border-color: #6b7280; }
+.dark .border-blue-200 { border-color: #1e40af; }
+.dark .border-green-200 { border-color: #166534; }
+.dark .border-red-200 { border-color: #991b1b; }
+.dark .border-yellow-200 { border-color: #92400e; }
+
+.text-xs { font-size: 0.875rem; line-height: 1.25rem; }
+.text-sm { font-size: 1rem; line-height: 1.5rem; }
+.text-base { font-size: 1.125rem; line-height: 1.75rem; }
+.text-lg { font-size: 1.25rem; line-height: 1.75rem; }
+.text-xl { font-size: 1.5rem; line-height: 2rem; }
+.text-2xl { font-size: 1.875rem; line-height: 2.25rem; }
 
 .font-medium { font-weight: 500; }
 .font-semibold { font-weight: 600; }
@@ -1403,7 +1454,7 @@ code {
 }
 
 .welcome-question {
-  font-size: 28px;
+  font-size: 36px;
   font-weight: 600;
   color: var(--color-primary);
   margin-bottom: var(--space-8);
@@ -1774,11 +1825,11 @@ code {
   border: none;
   outline: none;
   background: transparent;
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.5;
   resize: none;
-  min-height: 24px;
-  max-height: 120px;
+  min-height: 28px;
+  max-height: 140px;
   font-family: var(--font-family);
   color: var(--color-primary);
 }

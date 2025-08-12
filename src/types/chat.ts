@@ -7,7 +7,7 @@ export interface ChatMessage {
 }
 
 export interface ChatAction {
-  type: 'form' | 'document_upload' | 'payment_redirect' | 'quote_display' | 'options_selection' | 'confirmation';
+  type: 'form' | 'document_upload' | 'payment_redirect' | 'quote_display' | 'options_selection' | 'confirmation' | 'payment_buttons' | 'receipt' | 'human_agent_handoff';
   title: string;
   description?: string;
   [key: string]: any;
