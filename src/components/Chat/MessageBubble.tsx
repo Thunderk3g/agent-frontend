@@ -49,7 +49,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, onActionSubmit }
               <div className="absolute -right-2 top-4 w-0 h-0 border-t-8 border-t-transparent border-l-8 border-l-blue-500 border-b-8 border-b-transparent"></div>
             )}
 
-            <div className="text-sm leading-relaxed whitespace-pre-wrap">
+            <div className="text-sm leading-relaxed text-black whitespace-pre-wrap">
               {message.content}
             </div>
           </div>
